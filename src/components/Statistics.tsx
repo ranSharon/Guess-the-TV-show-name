@@ -1,6 +1,11 @@
 import React, {useEffect} from 'react';
+import { IStatistics } from '../models/IStatistics';
 
-const Statistics: React.FC = (props) => {
+interface IProps {
+    statistics: IStatistics
+}
+
+const Statistics: React.FC<IProps> = (props: IProps) => {
 
     return <div>Statistics</div>
 };

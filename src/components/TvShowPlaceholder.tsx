@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { ITvShow } from '../models/ITvShow';
 
 interface IProps {
-    tvShow: ITvShow;
+    tvShow: ITvShow
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -21,15 +21,18 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const TvShowPlaceholder: React.FC<IProps> = (props: IProps) => {
     const classes = useStyles();
+    
     const [tvShowName, setTvShowName] = useState('');
 
     useEffect(() => {
+        console.log(props.tvShow);
+        console.log(props.tvShow.name);
         setTvShowNamePlaceholder();
     }, [props.tvShow]);
 
     const setTvShowNamePlaceholder = (): void  => {
         // Set number of max blank characters in tv show name
-        const numberOfBlankCharacters: number = Math.floor(props.tvShow.name.length / 3);
+        const numberOfBlankCharacters: number = Math.round(props.tvShow.name.length / 3);
 
         // Set potential places of blank characters in tv show name
         const blankCharactersIndexesArray: Array<number> = [];
@@ -45,7 +48,7 @@ const TvShowPlaceholder: React.FC<IProps> = (props: IProps) => {
         const tvShowNameString: string = props.tvShow.name;
         const tvShowNameArray: Array<string> = tvShowNameString.split('');
         blankCharactersIndexesArray.forEach((charIndx) => {
-            if (tvShowNameArray[charIndx] !== ' ')
+            if ((/[a-zA-Z]/).test(tvShowNameArray[charIndx]))
                 tvShowNameArray[charIndx] = '_';
         });
 
