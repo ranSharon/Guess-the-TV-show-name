@@ -18,7 +18,11 @@ const Statistics: React.FC<IProps> = (props: IProps) => {
 
 	return (
 		<div>
-			<Button variant="contained" onClick={() => setShowDialog(true)}>
+			<Button
+				variant="contained"
+				color="primary"
+				onClick={() => setShowDialog(true)}
+			>
 				Statistics
 			</Button>
 			<Dialog open={showDialog} onClose={() => setShowDialog(false)}>

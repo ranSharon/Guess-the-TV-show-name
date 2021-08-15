@@ -42,6 +42,7 @@ const Hint: React.FC<IProps> = (props: IProps) => {
 			) : (
 				<Button
 					variant="contained"
+					color="primary"
 					size="large"
 					onClick={() => handleHintClick()}
 				>

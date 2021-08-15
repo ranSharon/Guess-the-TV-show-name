@@ -86,7 +86,7 @@ const TvShowInput: React.FC<IProps> = (props: IProps) => {
 					></TextField>
 				</Grid>
 				<Grid item>
-					<Button variant="contained" size="large" type="submit">
+					<Button color="primary" variant="contained" size="large" type="submit">
 						Try Your Guess
 					</Button>
 				</Grid>

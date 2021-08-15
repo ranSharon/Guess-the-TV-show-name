@@ -27,7 +27,6 @@ const TvShowPlaceholder: React.FC<IProps> = (props: IProps) => {
 	const [tvShowName, setTvShowName] = useState('');
 
 	useEffect(() => {
-		console.log(props.tvShow.name);
 		setTvShowNamePlaceholder();
 	}, [props.tvShow]);
 

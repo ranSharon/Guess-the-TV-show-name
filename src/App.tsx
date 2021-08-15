@@ -239,7 +239,7 @@ const App: React.FC = () => {
 					</Grid>
 					<Grid item xs={12}>
 						<Grid container justifyContent="center">
-							<Grid item xs={6}>
+							<Grid item>
 								<Hint
 									tvShow={tvShowsData.currentTvShow}
 									onHintClick={addHintToStatistics}
