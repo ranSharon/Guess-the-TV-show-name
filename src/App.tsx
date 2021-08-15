@@ -138,7 +138,7 @@ const App: React.FC = () => {
 
 	const checkUserGuess = (guess: string): void => {
 		// Correct guess
-		if (guess === tvShowsData.currentTvShow.name) {
+		if (guess.toLocaleLowerCase() === tvShowsData.currentTvShow.name.toLocaleLowerCase()) {
 			setFeedback({
 				show: true,
 				message: 'Correct guess, moving on',
