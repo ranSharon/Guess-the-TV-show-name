@@ -8,6 +8,11 @@ import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 import Lives from "./components/Lives";
 import Statistics from "./components/Statistics";
@@ -29,12 +34,20 @@ const useStyles = makeStyles((theme: Theme) =>
         spinner: {
             marginTop: theme.spacing(4),
         },
+        statusBar: {
+            marginTop: theme.spacing(2),
+            height: 150
+        },
+        statusBarItem: {
+            paddingTop: theme.spacing(1),
+            paddingBottom: theme.spacing(1),
+        },
     })
 );
 
-let currentPage: number = 98; // Specify which page to query from TMDB API
+let currentPage: number = 1; // Specify which page to query from TMDB API
 let totalPages: number; // Total number of pages that can be queried
-let currentTvShowIndex: number = 19; // Current tv show to guess index
+let currentTvShowIndex: number = 0; // Current tv show to guess index
 
 const App = () => {
     const classes = useStyles();
@@ -56,6 +69,10 @@ const App = () => {
         wrongGuesses: 0,
         numberOfHints: 0,
     });
+
+    const [lives, setLives] = useState(3);
+    const [score, setScore] = useState(0);
+    const [showDialog, setShowDialog] = useState(false);
 
     useEffect(() => {
         // If tv shows data weren't fetched and set yet, fetch and set it
@@ -105,7 +122,10 @@ const App = () => {
 
     const setCurrentTvShow = (): void => {
         // If somehow the user guess correctly all tv shows (from all pages), start over by query page number 1 from TMDB API
-        if (currentPage === totalPages && currentTvShowIndex > tvShowsData.tvShows.length - 1) {
+        if (
+            currentPage === totalPages &&
+            currentTvShowIndex > tvShowsData.tvShows.length - 1
+        ) {
             currentPage = 1;
             currentTvShowIndex = 0;
             setTvShowsData({
@@ -136,6 +156,7 @@ const App = () => {
     };
 
     const checkUserGuess = (guess: string): void => {
+        // Correct guess
         if (guess === tvShowsData.currentTvShow.name) {
             setFeedback({
                 show: true,
@@ -144,9 +165,12 @@ const App = () => {
             });
             setStatistics({
                 ...statistics,
-                correctGuesses: statistics.correctGuesses++,
+                correctGuesses: statistics.correctGuesses + 1,
             });
+            setScore(score + 1);
             setCurrentTvShow();
+
+            // Wrong guess
         } else {
             setFeedback({
                 show: true,
@@ -155,13 +179,46 @@ const App = () => {
             });
             setStatistics({
                 ...statistics,
-                wrongGuesses: statistics.wrongGuesses++,
+                wrongGuesses: statistics.wrongGuesses + 1,
             });
+            setLives(lives - 1);
         }
     };
 
     const handleFeedbackClose = (): void => {
         setFeedback({ ...feedback, show: false });
+    };
+
+    const addHintToStatistics = (): void => {
+        setStatistics({
+            ...statistics,
+            numberOfHints: statistics.numberOfHints + 1,
+        });
+    };
+
+    const showGameLostDialog = (): void => {
+        setShowDialog(true)
+    };
+
+    const startNewGame = (): void => {
+        setShowDialog(false);
+
+        currentPage = 1;
+        currentTvShowIndex= 0;
+        setTvShowsData({
+            isFetched: false,
+            tvShows: [],
+            currentTvShow: { name: "", overview: "" },
+        });
+
+        setFeedback({
+            show: false,
+            message: "",
+            color: "success",
+        });
+    
+        setLives(3);
+        setScore(0);
     };
 
     return (
@@ -171,7 +228,6 @@ const App = () => {
             !tvShowsData.currentTvShow.name &&
             !tvShowsData.currentTvShow.overview ? (
                 <CircularProgress
-                    onClick={() => fetchAndSetTvShowsData(1)}
                     className={classes.spinner}
                     size={80}
                 ></CircularProgress>
@@ -184,14 +240,18 @@ const App = () => {
                     spacing={1}
                 >
                     <Grid item xs={12}>
-                        <Grid container justifyContent="space-between">
-                            <Grid item xs={4}>
-                                <Lives></Lives>
+                        <Grid
+                            className={classes.statusBar}
+                            container
+                            justifyContent="space-between"
+                        >
+                            <Grid className={classes.statusBarItem} item sm={6} xs={12}>
+                                <Lives lives={lives} gameLost={showGameLostDialog}></Lives>
                             </Grid>
-                            <Grid item xs={4}>
-                                <Score></Score>
+                            <Grid className={classes.statusBarItem} item sm={3} xs={12}>
+                                <Score score={score}></Score>
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid className={classes.statusBarItem} item sm={3} xs={12}>
                                 <Statistics
                                     statistics={statistics}
                                 ></Statistics>
@@ -215,7 +275,7 @@ const App = () => {
                     <Grid item xs={12}>
                         <Grid container justifyContent="center">
                             <Grid item xs={6}>
-                                <Hint tvShow={tvShowsData.currentTvShow}></Hint>
+                                <Hint tvShow={tvShowsData.currentTvShow} onHintClick={addHintToStatistics}></Hint>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -228,6 +288,22 @@ const App = () => {
             >
                 <Alert severity={feedback.color}>{feedback.message}</Alert>
             </Snackbar>
+            <Dialog open={showDialog} onClose={() => startNewGame()} fullWidth={true} maxWidth={'xs'}>
+                <DialogTitle>Ohh!!</DialogTitle>
+                <DialogContent>
+                    <Typography gutterBottom variant="subtitle1">
+                        You lost
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={() => startNewGame()}
+                        color="primary"
+                    >
+                        Start New Game
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

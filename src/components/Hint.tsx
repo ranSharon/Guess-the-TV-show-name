@@ -5,7 +5,8 @@ import Button from "@material-ui/core/Button";
 import { ITvShow } from "../models/ITvShow";
 
 interface IProps {
-    tvShow: ITvShow;
+    tvShow: ITvShow,
+    onHintClick: Function,
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -25,6 +26,11 @@ const Hint: React.FC<IProps> = (props: IProps) => {
         setShowHint(false);
     }, [props.tvShow]);
 
+    const handleHintClick = () => {
+        setShowHint(true)
+        props.onHintClick();
+    };
+
     return (
         <div className={classes.hintContainer}>
             {showHint ? (
@@ -35,7 +41,7 @@ const Hint: React.FC<IProps> = (props: IProps) => {
                 <Button
                     variant="contained"
                     size="large"
-                    onClick={() => setShowHint(true)}
+                    onClick={() => handleHintClick()}
                 >
                     Hint
                 </Button>

@@ -1,8 +1,14 @@
 import React, {useEffect} from 'react';
 
-const Score: React.FC = (props) => {
+import Typography from "@material-ui/core/Typography";
 
-    return <div>Score</div>
+interface IProps {
+    score: number;
+}
+
+const Score: React.FC<IProps> = (props: IProps) => {
+
+    return <Typography variant="h6">Score: {props.score}</Typography>
 };
 
 export default Score;

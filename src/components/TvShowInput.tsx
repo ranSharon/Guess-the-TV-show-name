@@ -32,6 +32,10 @@ const TvShowInput: React.FC<IProps> = (props: IProps) => {
     const [helperText, setHelperText] = useState('');
     const [inputError, setInputError] = useState(false);
 
+    useEffect(() => {
+        setGuess('');
+    }, [props.tvShow]);
+
     const handleGuessSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
         console.log(guess);
