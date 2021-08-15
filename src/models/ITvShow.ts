@@ -1,4 +1,4 @@
 export interface ITvShow {
-    name: string,
-    overview: string,
+	name: string;
+	overview: string;
 }

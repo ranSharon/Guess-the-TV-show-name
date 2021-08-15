@@ -1,71 +1,74 @@
 import React, { useEffect, useState } from 'react';
+
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+
 import { ITvShow } from '../models/ITvShow';
 
 interface IProps {
-    tvShow: ITvShow
+	tvShow: ITvShow;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        tvShowNameContainer: {
-            paddingTop: theme.spacing(2),
-            paddingBottom: theme.spacing(2),
-        },
-        tvShowName: {
-            letterSpacing: 4,
-        },
-    })
+	createStyles({
+		tvShowNameContainer: {
+			paddingTop: theme.spacing(2),
+			paddingBottom: theme.spacing(2),
+		},
+		tvShowName: {
+			letterSpacing: 4,
+		},
+	})
 );
 
 const TvShowPlaceholder: React.FC<IProps> = (props: IProps) => {
-    const classes = useStyles();
-    
-    const [tvShowName, setTvShowName] = useState('');
+	const classes = useStyles();
 
-    useEffect(() => {
-        console.log(props.tvShow);
-        console.log(props.tvShow.name);
-        setTvShowNamePlaceholder();
-    }, [props.tvShow]);
+	const [tvShowName, setTvShowName] = useState('');
 
-    const setTvShowNamePlaceholder = (): void  => {
-        // Set number of max blank characters in tv show name
-        const numberOfBlankCharacters: number = Math.round(props.tvShow.name.length / 3);
+	useEffect(() => {
+		console.log(props.tvShow.name);
+		setTvShowNamePlaceholder();
+	}, [props.tvShow]);
 
-        // Set potential places of blank characters in tv show name
-        const blankCharactersIndexesArray: Array<number> = [];
-        for (let i = 1; i <= numberOfBlankCharacters; ) {
-            const randomIndex = getRandomArbitrary(1, props.tvShow.name.length);
-            if (!blankCharactersIndexesArray.includes(randomIndex)) {
-                blankCharactersIndexesArray.push(randomIndex);
-                i++;
-            }
-        }
+	const setTvShowNamePlaceholder = (): void => {
+		// Set number of max blank characters in tv show name
+		const numberOfBlankCharacters: number = Math.round(
+			props.tvShow.name.length / 3
+		);
 
-        // Set blank characters in tv show name
-        const tvShowNameString: string = props.tvShow.name;
-        const tvShowNameArray: Array<string> = tvShowNameString.split('');
-        blankCharactersIndexesArray.forEach((charIndx) => {
-            if ((/[a-zA-Z]/).test(tvShowNameArray[charIndx]))
-                tvShowNameArray[charIndx] = '_';
-        });
+		// Set potential places of blank characters in tv show name
+		const blankCharactersIndexesArray: Array<number> = [];
+		for (let i = 1; i <= numberOfBlankCharacters; ) {
+			const randomIndex = getRandomArbitrary(1, props.tvShow.name.length);
+			if (!blankCharactersIndexesArray.includes(randomIndex)) {
+				blankCharactersIndexesArray.push(randomIndex);
+				i++;
+			}
+		}
 
-        setTvShowName(tvShowNameArray.join(''));
-    };
+		// Set blank characters in tv show name
+		const tvShowNameString: string = props.tvShow.name;
+		const tvShowNameArray: Array<string> = tvShowNameString.split('');
+		blankCharactersIndexesArray.forEach((charIndx) => {
+			if (/[a-zA-Z]/.test(tvShowNameArray[charIndx]))
+				tvShowNameArray[charIndx] = '_';
+		});
 
-    const getRandomArbitrary = (min: number, max: number): number => {
-        return Math.floor(Math.random() * (max - min) + min);
-    };
+		setTvShowName(tvShowNameArray.join(''));
+	};
 
-    return (
-        <div className={classes.tvShowNameContainer}>
-            <Typography className={classes.tvShowName} variant="h5">
-                {tvShowName}
-            </Typography>
-        </div>
-    );
+	const getRandomArbitrary = (min: number, max: number): number => {
+		return Math.floor(Math.random() * (max - min) + min);
+	};
+
+	return (
+		<div className={classes.tvShowNameContainer}>
+			<Typography className={classes.tvShowName} variant="h5">
+				{tvShowName}
+			</Typography>
+		</div>
+	);
 };
 
 export default TvShowPlaceholder;

@@ -1,7 +1,7 @@
-type AlertSeverity = "error" | "info" | "success" | "warning";
+type AlertSeverity = 'error' | 'info' | 'success' | 'warning';
 
 export interface IFeedback {
-    show: boolean,
-    message: string,
-    color: AlertSeverity,
-};
+	show: boolean;
+	message: string;
+	color: AlertSeverity;
+}

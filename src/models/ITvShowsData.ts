@@ -1,7 +1,7 @@
-import { ITvShow } from "./ITvShow";
+import { ITvShow } from './ITvShow';
 
 export interface ITvShowsData {
-    isFetched: boolean,
-    tvShows: ITvShow[],
-    currentTvShow: ITvShow,    
+	isFetched: boolean;
+	tvShows: ITvShow[];
+	currentTvShow: ITvShow;
 }
