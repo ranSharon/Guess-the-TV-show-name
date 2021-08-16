@@ -50,7 +50,7 @@ const TvShowInput: React.FC<IProps> = (props: IProps) => {
 		if (guess && guess.length < props.tvShow.name.length) {
 			setInputError(true);
 			setHelperText(
-				`Guess should be ${props.tvShow.name.length + 1} characters`
+				`Guess should be ${props.tvShow.name.length} characters`
 			);
 			return;
 		}
